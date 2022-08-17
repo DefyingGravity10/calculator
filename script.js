@@ -1,5 +1,5 @@
 function checkExpression(e) {
-    if (operationPressed != true) {
+    if (operations.length == 0) {
         a += e.target.getAttribute("id");
     }
     else {
@@ -8,18 +8,15 @@ function checkExpression(e) {
 }
 
 function toggleOperator(e) {
-    if (operationPressed) {
+    operations.push(e.target.getAttribute("id"));
+
+    if (operations.length > 1) {
         operate();
-        operation = e.target.getAttribute("id");
-    }
-    else {
-        operationPressed = true;
-        operation = e.target.getAttribute("id");
-    }
+    } 
 }
 
 function operate() {
-    switch(operation) {
+    switch(operations[0]) {
         case ("add"): 
             result = add(Number(a), Number(b));
             break;
@@ -33,7 +30,7 @@ function operate() {
             result = divide(Number(a), Number(b));
             break;
     }
-    console.log(result);
+    console.log(`${a} ${operations[0]} ${b} = ${result}`);
     reset();
 }
 
@@ -54,15 +51,14 @@ function divide(a, b) {
 }
 
 function reset() {
-    a = "";
+    a = result;
     b = "";
-    operationPressed = false;
+    operations.shift();
 }
 
 let a = "";
 let b = "";
-let operationPressed = false; 
-let operation;
+const operations = [];
 let result;
 
 const numbers = document.querySelectorAll(".number");

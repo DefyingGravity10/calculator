@@ -31,7 +31,7 @@ function operate() {
             break;
     }
     console.log(`${a} ${operations[0]} ${b} = ${result}`);
-    reset();
+    configure();
 }
 
 function add(a, b) {
@@ -50,7 +50,7 @@ function divide(a, b) {
     return b == 0 ? "Error. Cannot divide a number by 0." : a / b;
 }
 
-function reset() {
+function configure() {
     a = result;
     b = "";
     operations.shift();
@@ -58,7 +58,7 @@ function reset() {
 
 let a = "";
 let b = "";
-const operations = [];
+let operations = [];
 let result;
 
 const numbers = document.querySelectorAll(".number");
@@ -69,3 +69,10 @@ operators.forEach(op => op.addEventListener("click", toggleOperator));
 
 const evaluate = document.querySelector(".eval");
 evaluate.addEventListener("click", operate);
+
+const ac = document.querySelector("#clear");
+ac.addEventListener("click", () => {
+    a = "";
+    b = "";
+    operations = [];
+})

@@ -1,0 +1,22 @@
+body, .calculator-body, .buttons, .impt {
+    display: flex;
+}
+
+body {
+    justify-content: center;
+}
+
+.calculator-body {
+    flex-direction: column;
+    align-items: stretch;
+    background-color: blanchedalmond;
+    max-width: 500px;
+}
+
+.screen {
+    background-color: silver;
+}
+
+.buttons {
+    flex-direction: column;
+}

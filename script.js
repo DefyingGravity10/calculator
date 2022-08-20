@@ -92,13 +92,12 @@ function configure() {
 
 let a = "";
 let b = "";
+let topCalcContents = "";
+let bottomCalcContents = "";
 let operations = [];
 let result;
 let defaultConfiguration = true;
 let equalPressed = false;
-
-let topCalcContents = "";
-let bottomCalcContents = "";
 
 const numbers = document.querySelectorAll(".number");
 numbers.forEach(number => number.addEventListener("click", checkExpression));
@@ -125,6 +124,7 @@ ac.addEventListener("click", () => {
     previousInput.textContent = "";
     currentInput.textContent = "";
     defaultConfiguration = true;
+    equalPressed = false;
 });
 
 const previousInput = document.querySelector("#prev-input");

@@ -47,6 +47,21 @@ function updateLowerScreenDisplay() {
     currentInput.textContent = bottomCalcContents;
 }
 
+function checkIfCanOperate(e) {
+    if (a != "" && b != "") {
+        operate();
+
+        if (!divError) {
+            topCalcContents += `${bottomCalcContents} ${e.target.getAttribute("id")}`;
+            updateUpperScreenDisplay();
+            configure();
+            equalPressed = true;
+        }
+    }
+    else {
+        alert("Invalid Move!");
+    }
+}
 function operate() {
     switch(operations[0]) {
         case ("+"): 
@@ -62,8 +77,17 @@ function operate() {
             result = divide(Number(a), Number(b));
             break;
     }
-    console.log(`${a} ${operations[0]} ${b} = ${result}`);
-    currentInput.textContent = result;
+
+    if (result == "error") {
+        alert("Error! You cannot divide a number by zero!");
+        clearContent();
+        divError = true;
+    }
+    else {
+        console.log(`${a} ${operations[0]} ${b} = ${result}`);
+        currentInput.textContent = result;
+    }
+    
 }
 
 function add(a, b) {
@@ -79,7 +103,7 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-    return b == 0 ? "Error. Cannot divide a number by 0." : a / b;
+    return b == 0 ? "error" : a / b;
 }
 
 function configure() {
@@ -90,32 +114,7 @@ function configure() {
     currentInput.textContent = a;
 }
 
-let a = "";
-let b = "";
-let topCalcContents = "";
-let bottomCalcContents = "";
-let operations = [];
-let result;
-let defaultConfiguration = true;
-let equalPressed = false;
-
-const numbers = document.querySelectorAll(".number");
-numbers.forEach(number => number.addEventListener("click", checkExpression));
-
-const operators = document.querySelectorAll(".op");
-operators.forEach(op => op.addEventListener("click", toggleOperator));
-
-const evaluate = document.querySelector(".eval");
-evaluate.addEventListener("click", operate);
-evaluate.addEventListener("click", (e) => {
-    topCalcContents += `${bottomCalcContents} ${e.target.getAttribute("id")}`;
-    updateUpperScreenDisplay();
-    configure();
-    equalPressed = true;
-});
-
-const ac = document.querySelector("#clear");
-ac.addEventListener("click", () => {
+function clearContent() {
     a = "";
     b = "";
     operations = [];
@@ -125,7 +124,30 @@ ac.addEventListener("click", () => {
     currentInput.textContent = "";
     defaultConfiguration = true;
     equalPressed = false;
-});
+    divError = false;
+}
+
+let a = "";
+let b = "";
+let topCalcContents = "";
+let bottomCalcContents = "";
+let operations = [];
+let result;
+let defaultConfiguration = true;
+let equalPressed = false;
+let divError = false;
+
+const numbers = document.querySelectorAll(".number");
+numbers.forEach(number => number.addEventListener("click", checkExpression));
+
+const operators = document.querySelectorAll(".op");
+operators.forEach(op => op.addEventListener("click", toggleOperator));
+
+const evaluate = document.querySelector(".eval");
+evaluate.addEventListener("click", checkIfCanOperate);
+
+const ac = document.querySelector("#clear");
+ac.addEventListener("click", clearContent);
 
 const previousInput = document.querySelector("#prev-input");
 const currentInput = document.querySelector("#current-input");

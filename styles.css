@@ -21,6 +21,14 @@ body {
     height: 80px;
 }
 
+#prev-input {
+    height: 25%;
+}
+
+#current-input {
+    height: 75%;
+}
+
 .buttons {
     flex-direction: column;
 }

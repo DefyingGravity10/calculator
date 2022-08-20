@@ -1,37 +1,50 @@
 function checkExpression(e) {
-    defaultConfiguration = false;
-    if (operations.length == 0) {
+    if (defaultConfiguration) {
         a += e.target.getAttribute("id");
-        calcContents += e.target.getAttribute("id");
-        updateScreenDisplay();
+        bottomCalcContents += e.target.getAttribute("id");
+        updateLowerScreenDisplay();
     }
     else {
         b += e.target.getAttribute("id");
-        calcContents += e.target.getAttribute("id");
-        updateScreenDisplay();
+        bottomCalcContents += e.target.getAttribute("id");
+        updateLowerScreenDisplay();
     }
 }
 
 function toggleOperator(e) {
     operations.push(e.target.getAttribute("id"));
-    calcContents += ` ${e.target.getAttribute("id")} `;
-    updateScreenDisplay();
 
-    if (operations.length > 1) {
-        operate();
-    } 
-
-    if (!defaultConfiguration) {
-        calcContents = `${a} ${e.target.getAttribute("id")} `;
-        updateScreenDisplay();
-        currentInput.textContent = "";
+    if (defaultConfiguration) {
+        topCalcContents = `${bottomCalcContents} ${operations[0]} `;
+        updateUpperScreenDisplay();
+        bottomCalcContents = "";
+        defaultConfiguration = false;
+        return;
     }
 
-
+    else {
+        if (b == "" && equalPressed) {
+            topCalcContents = `${result} ${operations[0]} `;
+            updateUpperScreenDisplay(); 
+            bottomCalcContents = "";
+            equalPressed = false;
+        }
+        else if (b != "" && !equalPressed) {
+            operate();
+            configure();
+            topCalcContents = `${result} ${operations[0]} `;
+            updateUpperScreenDisplay();
+            bottomCalcContents = "";
+        }
+    }
 }
 
-function updateScreenDisplay() {
-    previousInput.textContent = calcContents;
+function updateUpperScreenDisplay() {
+    previousInput.textContent = topCalcContents;
+}
+
+function updateLowerScreenDisplay() {
+    currentInput.textContent = bottomCalcContents;
 }
 
 function operate() {
@@ -51,7 +64,6 @@ function operate() {
     }
     console.log(`${a} ${operations[0]} ${b} = ${result}`);
     currentInput.textContent = result;
-    configure();
 }
 
 function add(a, b) {
@@ -74,14 +86,8 @@ function configure() {
     a = result;
     b = "";
     operations.shift();
-
-    if (operations.length > 1) {
-        calcContents = `${a} ${operations[0]}`;
-        previousInput.textContent = calcContents;
-        currentInput.textContent = "";
-    }
-    
-    
+    bottomCalcContents = result;
+    currentInput.textContent = a;
 }
 
 let a = "";
@@ -89,8 +95,10 @@ let b = "";
 let operations = [];
 let result;
 let defaultConfiguration = true;
+let equalPressed = false;
 
-let calcContents = "";
+let topCalcContents = "";
+let bottomCalcContents = "";
 
 const numbers = document.querySelectorAll(".number");
 numbers.forEach(number => number.addEventListener("click", checkExpression));
@@ -101,8 +109,10 @@ operators.forEach(op => op.addEventListener("click", toggleOperator));
 const evaluate = document.querySelector(".eval");
 evaluate.addEventListener("click", operate);
 evaluate.addEventListener("click", (e) => {
-    calcContents += ` ${e.target.getAttribute("id")}`;
-    updateScreenDisplay();
+    topCalcContents += `${bottomCalcContents} ${e.target.getAttribute("id")}`;
+    updateUpperScreenDisplay();
+    configure();
+    equalPressed = true;
 });
 
 const ac = document.querySelector("#clear");
@@ -110,7 +120,8 @@ ac.addEventListener("click", () => {
     a = "";
     b = "";
     operations = [];
-    calcContents = "";
+    topCalcContents = "";
+    bottomCalcContents = "";
     previousInput.textContent = "";
     currentInput.textContent = "";
     defaultConfiguration = true;

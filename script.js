@@ -142,7 +142,11 @@ function convertToWhole(operation) {
 }
 
 function revertToFloat(decimalPlaces) {
-    result = (Number(result) / 10 ** decimalPlaces).toString();
+    result = roundOffToTenDp(Number(result) / 10 ** decimalPlaces).toString();
+}
+
+function roundOffToTenDp(number) {
+    return Math.round(number * 10 ** 10) / 10 ** 10;
 }
 
 function add(a, b) {

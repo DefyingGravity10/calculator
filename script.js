@@ -14,7 +14,12 @@ function checkExpression(e) {
 function toggleOperator(e) {
     operations.push(e.target.getAttribute("id"));
 
-    if (defaultConfiguration) {
+    if (a == "") {
+        checkIfCanOperate();
+        clearContent();
+    }
+
+    else if (defaultConfiguration) {
         topCalcContents = `${bottomCalcContents} ${operations[0]} `;
         updateUpperScreenDisplay();
         bottomCalcContents = "";
@@ -23,8 +28,14 @@ function toggleOperator(e) {
     }
 
     else {
-        if (b == "" && equalPressed) {
-            topCalcContents = `${result} ${operations[0]} `;
+        if (b == "" && operations.length > 1) {
+            operations.shift();
+            topCalcContents = `${a} ${operations[0]} `;
+            updateUpperScreenDisplay(); 
+        }
+
+        else if (b == "") {
+            topCalcContents = `${a} ${operations[0]} `;
             updateUpperScreenDisplay(); 
             bottomCalcContents = "";
             equalPressed = false;
@@ -32,7 +43,7 @@ function toggleOperator(e) {
         else if (b != "" && !equalPressed) {
             operate();
             configure();
-            topCalcContents = `${result} ${operations[0]} `;
+            topCalcContents = `${a} ${operations[0]} `;
             updateUpperScreenDisplay();
             bottomCalcContents = "";
         }

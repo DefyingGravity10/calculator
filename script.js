@@ -1,13 +1,26 @@
+function checkIfDecimalPresent(e) {
+    if (defaultConfiguration && !decimalInA) {
+        checkExpression(e);
+        decimalInA = true;
+    }
+    else if (!defaultConfiguration && !decimalInB) {
+        checkExpression(e);
+        decimalInB = true;
+    }
+    else {
+        alert("Invalid move!");
+    }
+}
 function checkExpression(e) {
     if (defaultConfiguration) {
         a += e.target.getAttribute("id");
         bottomCalcContents += e.target.getAttribute("id");
         updateLowerScreenDisplay();
     }
-    else {
+    else {   
         b += e.target.getAttribute("id");
         bottomCalcContents += e.target.getAttribute("id");
-        updateLowerScreenDisplay();
+        updateLowerScreenDisplay();             
     }
 }
 
@@ -74,6 +87,7 @@ function checkIfCanOperate(e) {
     }
 }
 function operate() {
+    let numberOfDecimalPlaces = convertToWhole(operations[0]);
     switch(operations[0]) {
         case ("+"): 
             result = add(Number(a), Number(b));
@@ -95,10 +109,40 @@ function operate() {
         divError = true;
     }
     else {
+        revertToFloat(numberOfDecimalPlaces);
         console.log(`${a} ${operations[0]} ${b} = ${result}`);
         currentInput.textContent = result;
+    }   
+}
+
+function convertToWhole(operation) {
+    let decimalPlaces = 0;
+
+    if ((!decimalInA && !decimalInB) || operation == "*" || operation == "/") {
+        return decimalPlaces;
     }
-    
+    else if (!decimalInA){
+        decimalPlaces = b.length-1 - b.indexOf(".");
+        a = (Number(a) * 10 ** decimalPlaces).toString();
+        b = (Number(b) * 10 ** decimalPlaces).toString();
+        return decimalPlaces;
+    }
+    else if (!decimalInB) {
+        decimalPlaces = a.length-1 - a.indexOf(".");
+        a = (Number(a) * 10 ** decimalPlaces).toString();
+        b = (Number(b) * 10 ** decimalPlaces).toString();
+        return decimalPlaces;
+    }
+    else {
+        decimalPlaces = Math.max((a.length-1 - a.indexOf(".")), (b.length-1 - b.indexOf(".")));
+        a = (Number(a) * 10 ** decimalPlaces).toString();
+        b = (Number(b) * 10 ** decimalPlaces).toString();
+        return decimalPlaces;
+    }
+}
+
+function revertToFloat(decimalPlaces) {
+    result = (Number(result) / 10 ** decimalPlaces).toString();
 }
 
 function add(a, b) {
@@ -120,6 +164,7 @@ function divide(a, b) {
 function configure() {
     a = result;
     b = "";
+    decimalInA, decimalInB = false, false;
     operations.shift();
     bottomCalcContents = result;
     currentInput.textContent = a;
@@ -136,20 +181,25 @@ function clearContent() {
     defaultConfiguration = true;
     equalPressed = false;
     divError = false;
+    decimalInA = false;
+    decimalInB = false;
 }
 
 let a = "";
 let b = "";
+let decimalInA, decimalInB = false;
 let topCalcContents = "";
 let bottomCalcContents = "";
 let operations = [];
 let result;
 let defaultConfiguration = true;
-let equalPressed = false;
-let divError = false;
+let equalPressed, divError = false;
 
 const numbers = document.querySelectorAll(".number");
 numbers.forEach(number => number.addEventListener("click", checkExpression));
+
+const decimal = document.querySelector(".decimal");
+decimal.addEventListener("click", checkIfDecimalPresent);
 
 const operators = document.querySelectorAll(".op");
 operators.forEach(op => op.addEventListener("click", toggleOperator));

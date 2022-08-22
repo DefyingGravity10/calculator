@@ -1,3 +1,63 @@
+function clearContent() {
+    a = "";
+    b = "";
+    operations = [];
+    topCalcContents = "";
+    bottomCalcContents = "";
+    previousInput.textContent = "";
+    currentInput.textContent = "";
+    defaultConfiguration = true;
+    equalPressed = false;
+    divError = false;
+    decimalInA = false;
+    decimalInB = false;
+}
+
+function deleteContent() {
+    let removedCharacter;
+
+    if (defaultConfiguration) {
+        removedCharacter = a[a.length-1];
+        a = a.slice(0, a.length-1);
+        bottomCalcContents = a;
+        updateLowerScreenDisplay();
+
+        if (removedCharacter == ".") {
+            decimalInA = false;
+        }
+
+    }
+    else {
+        removedCharacter = b[b.length-1];
+        b = b.slice(0, b.length-1);
+        bottomCalcContents = b;
+        updateLowerScreenDisplay();
+
+        if (removedCharacter == ".") {
+            decimalInB = false;
+        } 
+    }
+}
+
+function reverseSign() {
+    if (defaultConfiguration) {
+        if (a == "") {
+            return;
+        }
+        a = (Number(a) * -1).toString();
+        bottomCalcContents = a;
+        updateLowerScreenDisplay();
+    }
+    else {
+        if (b == "") {
+            return;
+        }
+        b = (Number(b) * -1).toString();
+        bottomCalcContents = b;
+        updateLowerScreenDisplay();
+    }
+}
+
 function checkIfDecimalPresent(e) {
     if (defaultConfiguration && !decimalInA) {
         checkExpression(e);
@@ -142,10 +202,10 @@ function convertToWhole(operation) {
 }
 
 function revertToFloat(decimalPlaces) {
-    result = roundOffToTenDp(Number(result) / 10 ** decimalPlaces).toString();
+    result = roundOffToNineDp(Number(result) / 10 ** decimalPlaces).toString();
 }
 
-function roundOffToTenDp(number) {
+function roundOffToNineDp(number) {
     return Math.round(number * 10 ** 10) / 10 ** 10;
 }
 
@@ -174,65 +234,7 @@ function configure() {
     currentInput.textContent = a;
 }
 
-function clearContent() {
-    a = "";
-    b = "";
-    operations = [];
-    topCalcContents = "";
-    bottomCalcContents = "";
-    previousInput.textContent = "";
-    currentInput.textContent = "";
-    defaultConfiguration = true;
-    equalPressed = false;
-    divError = false;
-    decimalInA = false;
-    decimalInB = false;
-}
 
-function deleteContent() {
-    let removedCharacter;
-
-    if (defaultConfiguration) {
-        removedCharacter = a[a.length-1];
-        a = a.slice(0, a.length-1);
-        bottomCalcContents = a;
-        updateLowerScreenDisplay();
-
-        if (removedCharacter == ".") {
-            decimalInA = false;
-        }
-
-    }
-    else {
-        removedCharacter = b[b.length-1];
-        b = b.slice(0, b.length-1);
-        bottomCalcContents = b;
-        updateLowerScreenDisplay();
-
-        if (removedCharacter == ".") {
-            decimalInB = false;
-        } 
-    }
-}
-
-function reverseSign() {
-    if (defaultConfiguration) {
-        if (a == "") {
-            return;
-        }
-        a = (Number(a) * -1).toString();
-        bottomCalcContents = a;
-        updateLowerScreenDisplay();
-    }
-    else {
-        if (b == "") {
-            return;
-        }
-        b = (Number(b) * -1).toString();
-        bottomCalcContents = b;
-        updateLowerScreenDisplay();
-    }
-}
 
 //Initialize default settings.
 let a = "";
@@ -246,6 +248,9 @@ let defaultConfiguration = true;
 let equalPressed, divError = false;
 
 //Add event listeners to all the buttons.
+const ac = document.querySelector("#clear");
+ac.addEventListener("click", clearContent);
+
 const deleteButton = document.querySelector("#delete");
 deleteButton.addEventListener("click", deleteContent);
 
@@ -264,8 +269,6 @@ operators.forEach(op => op.addEventListener("click", toggleOperator));
 const evaluate = document.querySelector(".eval");
 evaluate.addEventListener("click", checkIfCanOperate);
 
-const ac = document.querySelector("#clear");
-ac.addEventListener("click", clearContent);
-
+//Add query selectors for portions of the calculator screen
 const previousInput = document.querySelector("#prev-input");
 const currentInput = document.querySelector("#current-input");

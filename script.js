@@ -86,7 +86,9 @@ function checkExpression(e) {
 
 function toggleOperator(e) {
     operations.push(e.target.getAttribute("id"));
-
+    formatOperator();
+}
+function formatOperator() {
     if (a == "") {
         checkIfCanOperate();
         clearContent();
@@ -173,7 +175,6 @@ function operate() {
     }
     else {
         revertToFloat(numberOfDecimalPlaces);
-        console.log(`${a} ${operations[0]} ${b} = ${result}`);
         currentInput.textContent = result;
     }   
 }
@@ -241,6 +242,69 @@ function configure() {
     currentInput.textContent = a;
 }
 
+function inputThroughKeyboard(e) {
+    const key = e.key;
+    const digits = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+    
+    if (key in digits) {
+        if (defaultConfiguration) {
+            a += key;
+            bottomCalcContents += key;
+            updateLowerScreenDisplay();
+        }
+        else {
+            b += key;
+            bottomCalcContents += key;
+            updateLowerScreenDisplay();
+        }
+    }
+    else if (key == "+" || key == "-" || key == "*" || key == "/" || key == "^") {
+        operations.push(key);
+        formatOperator();
+    }
+    else if (key == "=" || key == "Enter") {
+        if (a != "" && b != "") {
+            operate();
+
+            if (!divError) {
+                topCalcContents += `${bottomCalcContents} =`;
+                updateUpperScreenDisplay();
+                configure();
+                equalPressed = true;
+            }
+        }
+        else {
+            alert("Invalid Move!");
+        }
+    }
+    else if (key == "Escape") {
+        clearContent();
+    }
+    else if (key == "Backspace") {
+        deleteContent();
+    }
+    else if (key == "S" || key == "s") {
+        reverseSign();
+    }
+    else if (key == ".") {
+        if (defaultConfiguration && !decimalInA) {
+            a += key;
+            bottomCalcContents += key;
+            updateLowerScreenDisplay();
+            decimalInA = true;
+        }
+        else if (!defaultConfiguration && !decimalInB) {
+            b += key;
+            bottomCalcContents += key;
+            updateLowerScreenDisplay();
+            decimalInB = true;
+        }
+        else {
+            alert("Invalid move!");
+        }
+    }
+}
+
 //Initialize default settings.
 let a = "";
 let b = "";
@@ -277,3 +341,6 @@ evaluate.addEventListener("click", checkIfCanOperate);
 //Add query selectors for portions of the calculator screen
 const previousInput = document.querySelector("#prev-input");
 const currentInput = document.querySelector("#current-input");
+
+//Adding keyboard support
+window.addEventListener("keydown", inputThroughKeyboard);

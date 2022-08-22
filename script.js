@@ -161,6 +161,9 @@ function operate() {
         case("/"):
             result = divide(Number(a), Number(b));
             break;
+        case("^"):
+            result = power(Number(a), Number(b));
+            break;
     }
 
     if (result == "error") {
@@ -225,6 +228,10 @@ function divide(a, b) {
     return b == 0 ? "error" : a / b;
 }
 
+function power(a, b) {
+    return a ** b;
+}
+
 function configure() {
     a = result;
     b = "";
@@ -233,8 +240,6 @@ function configure() {
     bottomCalcContents = result;
     currentInput.textContent = a;
 }
-
-
 
 //Initialize default settings.
 let a = "";

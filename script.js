@@ -215,6 +215,25 @@ function deleteContent() {
     }
 }
 
+function reverseSign() {
+    if (defaultConfiguration) {
+        if (a == "") {
+            return;
+        }
+        a = (Number(a) * -1).toString();
+        bottomCalcContents = a;
+        updateLowerScreenDisplay();
+    }
+    else {
+        if (b == "") {
+            return;
+        }
+        b = (Number(b) * -1).toString();
+        bottomCalcContents = b;
+        updateLowerScreenDisplay();
+    }
+}
+
 //Initialize default settings.
 let a = "";
 let b = "";
@@ -229,6 +248,9 @@ let equalPressed, divError = false;
 //Add event listeners to all the buttons.
 const deleteButton = document.querySelector("#delete");
 deleteButton.addEventListener("click", deleteContent);
+
+const plusMinus = document.querySelector("#pm");
+plusMinus.addEventListener("click", reverseSign);
 
 const numbers = document.querySelectorAll(".number");
 numbers.forEach(number => number.addEventListener("click", checkExpression));

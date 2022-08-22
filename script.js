@@ -189,6 +189,33 @@ function clearContent() {
     decimalInB = false;
 }
 
+function deleteContent() {
+    let removedCharacter;
+
+    if (defaultConfiguration) {
+        removedCharacter = a[a.length-1];
+        a = a.slice(0, a.length-1);
+        bottomCalcContents = a;
+        updateLowerScreenDisplay();
+
+        if (removedCharacter == ".") {
+            decimalInA = false;
+        }
+
+    }
+    else {
+        removedCharacter = b[b.length-1];
+        b = b.slice(0, b.length-1);
+        bottomCalcContents = b;
+        updateLowerScreenDisplay();
+
+        if (removedCharacter == ".") {
+            decimalInB = false;
+        } 
+    }
+}
+
+//Initialize default settings.
 let a = "";
 let b = "";
 let decimalInA, decimalInB = false;
@@ -198,6 +225,10 @@ let operations = [];
 let result;
 let defaultConfiguration = true;
 let equalPressed, divError = false;
+
+//Add event listeners to all the buttons.
+const deleteButton = document.querySelector("#delete");
+deleteButton.addEventListener("click", deleteContent);
 
 const numbers = document.querySelectorAll(".number");
 numbers.forEach(number => number.addEventListener("click", checkExpression));

@@ -1,4 +1,4 @@
-body, .calculator-body, .buttons, .impt {
+body, .calculator-body, .buttons, .impt, .numpad {
     display: flex;
 }
 
@@ -9,26 +9,47 @@ body {
 .calculator-body {
     flex-direction: column;
     align-items: stretch;
-    background-color: blanchedalmond;
-    max-width: 500px;
+    background-color: rgb(70, 70, 70);
+    max-width: 350px;
+    padding: 16px;
+    border-radius: 16px;
 }
 
 .screen {
     background-color: silver;
-    padding: 10px;
-    margin: 20px;
-
+    padding: 16px;
+    margin: 8px 10px 16px 10px;
+    border-radius: 4px;
     height: 80px;
 }
 
+#prev-input, #current-input {
+    font-family: "Roboto", "Arial", "sans-serif";
+}
+
 #prev-input {
-    height: 25%;
+    height: 30%;
+    font-size: 16px;
 }
 
 #current-input {
-    height: 75%;
+    height: 70%;
+    font-size: 32px;
 }
 
 .buttons {
     flex-direction: column;
+    
+}
+
+.numpad {
+    width: 200px;
+    flex-wrap: wrap;
+    padding: 10px;
+    gap: 10px;   
+}
+
+.number, .decimal {
+    width: 48px;
+    height: 48px;
 }

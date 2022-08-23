@@ -1,4 +1,4 @@
-body, .calculator-body, .buttons, .impt, .numpad {
+body, .calculator-body, .buttons, .numpad, .left-buttons, .right-buttons {
     display: flex;
 }
 
@@ -37,19 +37,44 @@ body {
     font-size: 32px;
 }
 
-.buttons {
-    flex-direction: column;
-    
-}
-
 .numpad {
-    width: 200px;
+    width: 170px;
     flex-wrap: wrap;
     padding: 10px;
-    gap: 10px;   
+    gap: 12px;   
 }
 
-.number, .decimal {
+.number, .decimal, #pm {
     width: 48px;
-    height: 48px;
+    height: 42px;
+}
+
+.left-buttons, .right-buttons {
+    flex-direction: column;
+    padding: 10px;
+    gap: 12px;
+}
+
+.left-buttons, .right-buttons {  
+    padding-left: 6px;
+}
+
+#clear, #delete {
+    width: 48px;
+    height: 36px;
+}
+
+.plus, .mult {
+    width: 48px;
+    height: 50px;
+}
+
+.minus, .divide, .pow {
+    width: 48px;
+    height: 31px;
+}
+
+.eval {
+    width: 48px;
+    height: 69px;
 }
